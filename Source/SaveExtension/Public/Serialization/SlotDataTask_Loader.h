@@ -115,8 +115,8 @@ protected:
 	void PrepareLevel(const ULevel* Level, FLevelRecord& LevelRecord);
 
 	/** Deserializes all Level actors. */
-	inline void DeserializeLevel_Actor(AActor* const Actor, const FLevelRecord& LevelRecord, const FSELevelFilter& Filter);
-
+	void DeserializeLevel_Actor(AActor* const Actor, const FLevelRecord& LevelRecord, const FSELevelFilter& Filter);
+	
 	void FindNextAsyncLevel(ULevelStreaming*& OutLevelStreaming) const;
 
 private:

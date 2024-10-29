@@ -573,11 +573,24 @@ inline void USaveManager::IterateSubscribedInterfaces(TFunction<void(UObject*)>&
 
 inline USaveManager* USaveManager::Get(const UObject* Context)
 {
+	if(Context == nullptr) UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::Get -> Context object is null"));
 	UWorld* World = GEngine->GetWorldFromContextObject(Context, EGetWorldErrorMode::LogAndReturnNull);
 	if (World)
 	{
-		return UGameInstance::GetSubsystem<USaveManager>(World->GetGameInstance());
+		USaveManager* SM = UGameInstance::GetSubsystem<USaveManager>(World->GetGameInstance());
+		if(SM == nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::Get-> Save Manager is null"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::Get-> Got Save Manager"));
+		}
+		
+		return SM;
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::Get -> UWorld from context object is null"));
 	return nullptr;
 }
 

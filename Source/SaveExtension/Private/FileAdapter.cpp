@@ -300,7 +300,8 @@ void FFileAdapter::DeserializeObject(UObject*& Object, FStringView ClassName, co
 		return;
 	}
 
-	UClass* ObjectClass = FindObject<UClass>(ANY_PACKAGE, ClassName.GetData());
+	//UClass* ObjectClass = FindObject<UClass>(ANY_PACKAGE, ClassName.GetData());
+	UClass* ObjectClass = FindFirstObject<UClass>(ClassName.GetData());
 	if (!ObjectClass)
 	{
 		ObjectClass = LoadObject<UClass>(nullptr, ClassName.GetData());

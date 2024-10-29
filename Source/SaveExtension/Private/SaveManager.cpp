@@ -191,15 +191,38 @@ void USaveManager::BPLoadSlot(
 void USaveManager::BPLoadAllSlotInfos(const bool bSortByRecent, TArray<USlotInfo*>& SaveInfos,
 	ELoadInfoResult& Result, struct FLatentActionInfo LatentInfo)
 {
+
+	if(LatentInfo.CallbackTarget == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::BPLoadAllSlotInfos -> LatentInfo.CallbackTarget is null."));
+	}
+	
 	if (UWorld* World = GetWorld())
 	{
 		FLatentActionManager& LatentActionManager = World->GetLatentActionManager();
-		if (LatentActionManager.FindExistingAction<FLoadInfosAction>(
-				LatentInfo.CallbackTarget, LatentInfo.UUID) == nullptr)
+		if (LatentActionManager.FindExistingAction<FLoadInfosAction>(LatentInfo.CallbackTarget, LatentInfo.UUID) == nullptr)
 		{
 			LatentActionManager.AddNewAction(LatentInfo.CallbackTarget, LatentInfo.UUID,
 				new FLoadInfosAction(this, bSortByRecent, SaveInfos, Result, LatentInfo));
 		}
+		
+		UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::BPLoadAllSlotInfos -> SaveInfos array size: %d"), SaveInfos.Num());
+		for(int i = 0; i < SaveInfos.Num(); i++)
+		{
+			if(SaveInfos[i] == nullptr || IsValid(SaveInfos[i]))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::BPLoadAllSlotInfos -> SaveInfos [ %d ] is null or not valid"), i);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::BPLoadAllSlotInfos -> SaveInfos [ %d ] : %s"), i, *SaveInfos[i]->FileName.ToString());
+			}
+		}
+		
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SaveExtension: USaveManager::BPLoadAllSlotInfos -> GetWorld is null"));
 	}
 }
 

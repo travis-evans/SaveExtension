@@ -13,6 +13,11 @@ FLoadInfosAction::FLoadInfosAction(USaveManager* Manager, const bool bSortByRece
 	, OutputLink(LatentInfo.Linkage)
 	, CallbackTarget(LatentInfo.CallbackTarget)
 {
+	if(Manager == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SaveExtension: FLoadInfosAction::FLoadInfosAction -> Manager is null"));	
+	}
+	
 	Manager->LoadAllSlotInfos(bSortByRecent, FOnSlotInfosLoaded::CreateLambda([this](const TArray<USlotInfo*>& Results) {
 		SlotInfos = Results;
 		bFinished = true;
